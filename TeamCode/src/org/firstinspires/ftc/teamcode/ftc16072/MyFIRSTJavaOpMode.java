@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class MyFIRSTJavaOpMode extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
+    private DcMotor backLeft;
+    private DcMotor backRight;
     private Servo servoTest;
 
 
@@ -18,21 +20,23 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
     public void runOpMode() {
         frontLeft = hardwareMap.get(DcMotor.class, "front_left_motor");
         frontRight = hardwareMap.get(DcMotor.class, "front_right_motor");
+        backLeft = hardwareMap.get(DcMotor.class, "back_left_motor");
+        backRight = hardwareMap.get(DcMotor.class, "back_right_motor");
         servoTest = hardwareMap.get(Servo.class, "back_servo");
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         waitForStart();
 
+        double rightX = 0;
         double leftY = 0;
-        double leftX = 0;
 
         while (opModeIsActive()) {
             //for Dc motor
-            leftY = -this.gamepad1.left_stick_y;
-            leftX = this.gamepad1.left_stick_x;
-            frontLeft.setPower(leftY + leftX);
-            frontRight.setPower(leftY - leftX);
+            rightX = -this.gamepad1.right_stick_x;
+            leftY = this.gamepad1.left_stick_y;
+            frontLeft.setPower(rightX + leftY);
+            frontRight.setPower(rightX - leftY);
 
             //check to see if we have to move the servo motor
             if (gamepad1.y) {
@@ -46,7 +50,7 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
             telemetry.addData("Front Left Motor Power", frontLeft.getPower());
             telemetry.addData("Front Right Motor Power", frontRight.getPower());
             telemetry.addData("left_stick_y", gamepad1.left_stick_y);
-            telemetry.addData("left_stick_x", gamepad1.left_stick_x);
+            telemetry.addData("right_stick_x", gamepad1.right_stick_x);
 
             telemetry.addData("Status", "Running");
             telemetry.update();

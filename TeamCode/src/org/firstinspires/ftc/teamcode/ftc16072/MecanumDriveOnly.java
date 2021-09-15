@@ -5,8 +5,6 @@ import java.math.RoundingMode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
@@ -17,8 +15,6 @@ public class MecanumDriveOnly extends LinearOpMode {
     private DcMotor frontRight;
     private DcMotor backRight;
     private DcMotor backLeft;
-    private DigitalChannel digitalTouch;
-    private DistanceSensor sensorColorRange;
     private Servo servoTest;
 
     @Override
@@ -28,14 +24,11 @@ public class MecanumDriveOnly extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "front_right_motor");
         backRight = hardwareMap.get(DcMotor.class, "back_right_motor");
         backLeft = hardwareMap.get(DcMotor.class, "back_left_motor");
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
-        sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
         servoTest = hardwareMap.get(Servo.class, "back_servo");
 
         boolean lastAState = false;
         double acceleratePower = 0.0;
 
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -96,6 +89,8 @@ public class MecanumDriveOnly extends LinearOpMode {
             }
             lastAState = gamepad1.a;
 
+            composeTelemetry();
+
             telemetry.update();
         }
     }
@@ -107,6 +102,8 @@ public class MecanumDriveOnly extends LinearOpMode {
         telemetry.addData("rightRear", round(backRight.getPower()));
         telemetry.addData("Accelerating", accelerating);
         telemetry.addData("Slow Mode", slowMode);
+        telemetry.addData("left_stick_y", gamepad1.left_stick_y);
+        telemetry.addData("left_stick_x", gamepad1.left_stick_x);
     }
 
     private static double round(double value) {
