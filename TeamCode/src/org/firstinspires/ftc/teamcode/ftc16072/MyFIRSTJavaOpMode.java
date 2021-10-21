@@ -11,20 +11,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class MyFIRSTJavaOpMode extends LinearOpMode {
     private DcMotor motorTest;
-    private DigitalChannel digitalTouch;
     private DistanceSensor sensorColorRange;
     private Servo servoTest;
 
 
     @Override
     public void runOpMode() {
-        motorTest = hardwareMap.get(DcMotor.class, "motorTest");
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
-        sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        servoTest = hardwareMap.get(Servo.class, "servoTest");
-
-        //touch sensor
-        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
+        motorTest = hardwareMap.get(DcMotor.class, "front_left_motor");
+        sensorColorRange = hardwareMap.get(DistanceSensor.class, "front_distance");
+        servoTest = hardwareMap.get(Servo.class, "back_servo");
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -33,7 +28,7 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
         double tgtPower = 0;
 
         while (opModeIsActive()) {
-            //for servo motor
+            //for DC motor
             tgtPower = -this.gamepad1.left_stick_y;
             motorTest.setPower(tgtPower);
             //check to see if we have to move the servo motor
@@ -44,18 +39,12 @@ public class MyFIRSTJavaOpMode extends LinearOpMode {
             } else if (gamepad1.a) {
                 servoTest.setPosition(1);
             }
+
             telemetry.addData("Servo Position", servoTest.getPosition());
             telemetry.addData("Target Power", tgtPower);
             telemetry.addData("Motor Power", motorTest.getPower());
 
             //checking if button is pressed
-            if (digitalTouch.getState() == false) {
-                //button is pressed
-                telemetry.addData("Button", "PRESSED");
-            } else {
-                //button is not pressed
-                telemetry.addData("Button", "NOT PRESSED");
-            }
 
             telemetry.addData("Status", "Running");
             telemetry.update();
